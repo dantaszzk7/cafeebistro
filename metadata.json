@@ -1,0 +1,6 @@
+{
+  "name": "Café & Bistrô",
+  "description": "Cardápio virtual interativo com personalização de itens, carrinho de compras e fechamento de pedidos via WhatsApp.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
