@@ -218,22 +218,6 @@ export const products: Product[] = [
     addons: [],
     customFields: [defaultObservationField]
   },
-  {
-    id: "guisado-galinha",
-    name: "Guisado / Galinha",
-    category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
-    price: 17.99,
-    emoji: "🍲",
-    image: "https://i.ibb.co/zdrQ6xM/guisado.png",
-    available: true,
-    featured: false,
-    order: 7,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-
   // -----------------------------------------
   // CATEGORIA: ALMOÇO (almoco)
   // -----------------------------------------
@@ -443,7 +427,7 @@ export const products: Product[] = [
     description: "Corte macio e saboroso de colchão mole grelhado.",
     price: 24.99,
     emoji: "🥩",
-    image: "https://i.ibb.co/prXfCvgC/fraldinha.png",
+    image: "https://ibb.co/gbYsd7gW",
     available: true,
     featured: false,
     order: 14.7,
@@ -458,7 +442,7 @@ export const products: Product[] = [
     description: "O corte mais nobre e macio, grelhado com perfeição.",
     price: 24.99,
     emoji: "🥩",
-    image: "https://i.ibb.co/TxQf1Pv2/picanha.png",
+    image: "https://ibb.co/zTpzfzxT",
     available: true,
     featured: true,
     order: 14.8,
@@ -473,7 +457,7 @@ export const products: Product[] = [
     description: "Filé de tilápia grelhado leve e saboroso.",
     price: 24.99,
     emoji: "🐟",
-    image: "https://i.ibb.co/wN2VxWbL/frango.png",
+    image: "https://ibb.co/6ckLnMmW",
     available: true,
     featured: false,
     order: 14.9,
