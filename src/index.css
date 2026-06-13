@@ -94,3 +94,7 @@ body {
   white-space: nowrap;
 }
 
+#productsGrid {
+  scroll-margin-top: 140px;
+}
+

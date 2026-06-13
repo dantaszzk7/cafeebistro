@@ -436,6 +436,17 @@ export default function App() {
                           block: "nearest",
                           inline: "center"
                         });
+
+                        // Automatically scroll to the top of the products grid so the user sees the filtered results directly
+                        setTimeout(() => {
+                          const productsArea = document.getElementById("productsGrid");
+                          if (productsArea) {
+                            productsArea.scrollIntoView({
+                              behavior: "smooth",
+                              block: "start"
+                            });
+                          }
+                        }, 100);
                       }}
                       className={`category-btn flex-none shrink-0 whitespace-nowrap px-6 py-2.5 rounded-full text-xs font-bold transition-all border cursor-pointer active:scale-95 duration-150 ${
                         isActive
@@ -451,7 +462,7 @@ export default function App() {
             </div>
 
             {/* Menu Items Showcase grids layout */}
-            <div className="space-y-6">
+            <div className="space-y-6" id="productsGrid">
               <div className="flex justify-between items-center select-none">
                 <h2 className="text-2xl font-bold tracking-tight text-white">
                   {categories.find((c) => c.id === activeCategory)?.name || "Almoço"}
