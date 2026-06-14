@@ -105,12 +105,18 @@ export default function CartDrawer({
                       {/* Configuration Details summary list */}
                       {item.details && item.details.length > 0 && (
                         <div className="mt-1 text-xs text-on-surface-variant space-y-0.5 max-w-[200px]">
-                          {item.details.map((d, index) => (
-                            <p key={index} className="line-clamp-1">
-                              • <span className="font-medium text-white/50">{d.label}: </span> 
-                              <span>{d.value}</span>
-                            </p>
-                          ))}
+                          {item.details.map((d, index) => {
+                            let displayLabel = d.label;
+                            if (d.label === "Observação do pedido" || d.label === "Observação do almoço") {
+                              displayLabel = "Observação";
+                            }
+                            return (
+                              <p key={index} className="line-clamp-1">
+                                • <span className="font-medium text-white/50">{displayLabel}: </span> 
+                                <span>{d.value}</span>
+                              </p>
+                            );
+                          })}
                         </div>
                       )}
                     </div>

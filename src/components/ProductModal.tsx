@@ -17,6 +17,7 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
   
   const [selectedAddons, setSelectedAddons] = useState<Addon[]>([]);
   const [customFields, setCustomFields] = useState<Record<string, string>>({});
+  const [validationErrors, setValidationErrors] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState<number>(1);
 
 
@@ -26,6 +27,7 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
     setSelectedVariant(product.variants && product.variants.length > 0 ? product.variants[0] : undefined);
     setSelectedAddons([]);
     setCustomFields({});
+    setValidationErrors({});
     setQuantity(1);
   }, [product]);
 
@@ -47,6 +49,60 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
       ...prev,
       [fieldId]: value,
     }));
+    
+    // Clear validation error when a value is selected/typed
+    if (value) {
+      setValidationErrors((prev) => {
+        const copy = { ...prev };
+        delete copy[fieldId];
+        return copy;
+      });
+    }
+  };
+
+  const handleCheckboxToggle = (fieldId: string, option: string) => {
+    const field = product.customFields.find((f) => f.id === fieldId);
+    setCustomFields((prev) => {
+      const currentVal = prev[fieldId] || "";
+      const selectedList = currentVal ? currentVal.split(", ").filter(Boolean) : [];
+      let newList: string[];
+      if (selectedList.includes(option)) {
+        newList = selectedList.filter((item) => item !== option);
+        // Clear validation error when we change/remove selection
+        setValidationErrors((prevErrors) => {
+          const copy = { ...prevErrors };
+          delete copy[fieldId];
+          return copy;
+        });
+      } else {
+        if (field && field.maxChoices !== undefined && selectedList.length >= field.maxChoices) {
+          // If we reached max choices, show warning and ignore the click
+          setValidationErrors((prevErrors) => ({
+            ...prevErrors,
+            [fieldId]: field.id === "opcoes-carne"
+              ? "Você pode escolher apenas 2 opções de carne."
+              : field.id === "opcoes-acompanhamento"
+              ? "Você pode escolher apenas 2 opções de acompanhamento."
+              : field.id === "sabores" && product.id === "tapioca"
+              ? "Você pode escolher apenas 2 sabores."
+              : `Você pode escolher apenas ${field.maxChoices} opções.`
+          }));
+          return prev;
+        }
+        newList = [...selectedList, option];
+        // Clear validation error when a value is selected
+        setValidationErrors((prevErrors) => {
+          const copy = { ...prevErrors };
+          delete copy[fieldId];
+          return copy;
+        });
+      }
+      const newValue = newList.join(", ");
+      return {
+        ...prev,
+        [fieldId]: newValue,
+      };
+    });
   };
 
   const incrementQty = () => setQuantity((q) => q + 1);
@@ -58,7 +114,17 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
   const calculateSinglePrice = () => {
     if (isPendingPrice) return null;
     
-    let sum = selectedVariant ? (selectedVariant.price ?? 0) : (product.price ?? 0);
+    let base = selectedVariant ? (selectedVariant.price ?? 0) : (product.price ?? 0);
+    
+    if (product.id === "cafe-da-manha") {
+      const selectedMeats = (customFields["opcoes-carne"] || "").split(", ").filter(Boolean);
+      if (selectedMeats.includes("Charque") || selectedMeats.includes("Carne de sol")) {
+        base = 12.99;
+      }
+    }
+    
+
+    let sum = base;
     
     selectedAddons.forEach((addon) => {
       sum += addon.price ?? 0;
@@ -71,6 +137,64 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
   const totalPrice = singlePrice !== null ? singlePrice * quantity : null;
 
   const handleSubmit = () => {
+    // Validate required custom fields
+    const errors: Record<string, string> = {};
+    product.customFields.forEach((field) => {
+      if (field.type === "checkbox") {
+        const selectedList = (customFields[field.id] || "").split(", ").filter(Boolean);
+        if (field.required && selectedList.length === 0) {
+          errors[field.id] = field.id === "opcoes-principais"
+            ? "Escolha pelo menos 1 opção principal."
+            : field.id === "opcoes-carne"
+            ? "Escolha pelo menos 1 opção de carne."
+            : field.id === "opcoes-acompanhamento"
+            ? "Escolha 2 opções de acompanhamento."
+            : field.id === "sabores" && product.id === "tapioca"
+            ? "Escolha 2 sabores para sua tapioca."
+            : `Escolha pelo menos uma opção.`;
+        } else if (field.minChoices !== undefined && selectedList.length < field.minChoices) {
+          errors[field.id] = field.id === "opcoes-principais"
+            ? "Escolha pelo menos 1 opção principal."
+            : field.id === "opcoes-carne"
+            ? "Escolha pelo menos 1 opção de carne."
+            : field.id === "opcoes-acompanhamento"
+            ? "Escolha 2 opções de acompanhamento."
+            : field.id === "sabores" && product.id === "tapioca"
+            ? "Escolha 2 sabores para sua tapioca."
+            : `Selecione pelo menos ${field.minChoices} opções.`;
+        } else if (field.maxChoices !== undefined && selectedList.length > field.maxChoices) {
+          errors[field.id] = field.id === "opcoes-principais"
+            ? "Você pode escolher até 2 opções principais."
+            : field.id === "opcoes-carne"
+            ? "Você pode escolher até 2 opções de carne."
+            : field.id === "opcoes-acompanhamento"
+            ? "Você pode escolher apenas 2 opções de acompanhamento."
+            : field.id === "sabores" && product.id === "tapioca"
+            ? "Você pode escolher apenas 2 sabores."
+            : `Você pode escolher apenas ${field.maxChoices} opções.`;
+        }
+      } else {
+        if (field.required && !customFields[field.id]) {
+          errors[field.id] = field.id === "carne"
+            ? "Escolha a carne."
+            : field.id === "carne-nobre"
+            ? "Escolha a carne nobre antes de adicionar ao pedido."
+            : field.id === "quantidade-porcoes"
+            ? "Escolha a quantidade de porções."
+            : field.id === "bebida"
+            ? "Escolha a bebida do combo."
+            : (field.id === "primeiro-sabor" || field.id === "segundo-sabor")
+            ? "Escolha os dois sabores da tapioca."
+            : "Escolha um sabor ou marca.";
+        }
+      }
+    });
+
+    if (Object.keys(errors).length > 0) {
+      setValidationErrors(errors);
+      return;
+    }
+
     const details = [];
 
     // Add variant name
@@ -89,15 +213,67 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
         label: "Adicional",
         value: `${a.name}${a.price ? ` (+R$ ${a.price.toFixed(2)})` : ""}`
       });
-    });
+    } );
 
     // Add custom fields
     product.customFields.forEach((field) => {
       const val = customFields[field.id];
       if (val) {
+        let label = field.label;
+        if (product.id === "cafe-da-manha") {
+          if (field.id === "opcoes-principais") {
+            label = "Opções principais";
+          } else if (field.id === "opcoes-carne") {
+            label = "Opções de carne";
+          } else if (field.id === "observacao") {
+            label = "Observação do pedido";
+          }
+        } else if (product.id === "almoco") {
+          if (field.id === "carne") {
+            label = "Carne";
+          } else if (field.id === "acompanhamentos") {
+            label = "Acompanhamentos";
+          } else if (field.id === "observacao") {
+            label = "Observação do almoço";
+          }
+        } else if (product.id === "almoco-nobre") {
+          if (field.id === "carne-nobre") {
+            label = "Carne nobre";
+          } else if (field.id === "acompanhamentos") {
+            label = "Acompanhamentos";
+          } else if (field.id === "observacao") {
+            label = "Observação do almoço";
+          }
+        } else if (product.id === "combo-hamburguer-artesanal" || product.id === "combo-hamburguer-tradicional" || product.id === "combo-pao-com-charque") {
+          if (field.id === "bebida") {
+            label = "Bebida";
+          } else if (field.id === "detalhe-bebida") {
+            label = "Detalhe da bebida";
+          } else if (field.id === "observacao") {
+            label = "Observação do combo";
+          }
+        } else if (product.id === "tapioca") {
+          if (field.id === "primeiro-sabor") {
+            label = "Primeiro sabor";
+          } else if (field.id === "segundo-sabor") {
+            label = "Segundo sabor";
+          } else if (field.id === "observacao") {
+            label = "Observação da tapioca";
+          }
+        } else if (product.id === "cafe-da-manha-almoco" || product.id === "cuscuz" || product.id === "inhame" || product.id === "macaxeira") {
+          if (field.id === "opcoes-carne") {
+            label = "Opções de carne";
+          } else if (field.id === "opcoes-acompanhamento") {
+            label = "Opções escolhidas";
+          } else if (field.id === "observacao") {
+            label = "Observação do pedido";
+          } else if (field.id === "quantidade-porcoes") {
+            label = "Quantidade de porções";
+          }
+        }
         details.push({
           id: `custom-${field.id}`,
-          label: field.label,
+          label: label,
           value: val
         });
       }
@@ -274,15 +450,29 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
               <div className="space-y-4">
                 {product.customFields.map((field) => (
                   <div key={field.id} className="space-y-2">
-                    <label className="block text-sm text-on-surface-variant font-semibold">
-                      {field.label}
+                    <label className="block text-sm text-on-surface-variant font-semibold flex items-center justify-between">
+                      <span className="flex items-center gap-1.5">
+                        {field.label}
+                        {field.required && (
+                          <span className="text-[10px] bg-red-400/10 text-red-400 px-1.5 py-0.5 rounded-full font-extrabold">
+                            Obrigatório
+                          </span>
+                        )}
+                      </span>
+                      {validationErrors[field.id] && (
+                        <span className="text-xs text-red-400 font-bold animate-pulse">
+                          {validationErrors[field.id]}
+                        </span>
+                      )}
                     </label>
-                    
+
                     {field.type === "select" ? (
                       <select
                         value={customFields[field.id] || ""}
                         onChange={(e) => handleCustomFieldChange(field.id, e.target.value)}
-                        className="w-full bg-surface-container border border-white/5 rounded-2xl p-4 text-white focus:outline-none focus:border-primary text-sm cursor-pointer"
+                        className={`w-full bg-surface-container border rounded-2xl p-4 text-white focus:outline-none focus:border-primary text-sm cursor-pointer transition-all ${
+                          validationErrors[field.id] ? "border-red-500 bg-red-500/5 focus:border-red-500" : "border-white/5"
+                        }`}
                       >
                         <option value="">Selecione uma opção...</option>
                         {field.options?.map((opt) => (
@@ -291,13 +481,41 @@ export default function ProductModal({ product, onClose, onAddToCart }: ProductM
                           </option>
                         ))}
                       </select>
+                    ) : field.type === "checkbox" ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
+                        {field.options?.map((opt) => {
+                          const selectedList = (customFields[field.id] || "").split(", ").filter(Boolean);
+                          const isChecked = selectedList.includes(opt);
+                          return (
+                            <button
+                              key={opt}
+                              type="button"
+                              onClick={() => handleCheckboxToggle(field.id, opt)}
+                              className={`flex items-center gap-2.5 p-3 rounded-xl border text-sm transition-all text-left cursor-pointer ${
+                                isChecked
+                                  ? "border-primary bg-primary/10 text-white"
+                                  : "border-white/5 bg-white/5 text-on-surface-variant hover:border-white/10"
+                              }`}
+                            >
+                              <div className={`w-4 h-4 rounded flex items-center justify-center border transition-all shrink-0 ${
+                                isChecked ? "bg-primary border-primary text-on-primary" : "border-white/20"
+                              }`}>
+                                {isChecked && <span className="text-[8px] font-black">✓</span>}
+                              </div>
+                              <span className="font-medium text-xs sm:text-sm">{opt}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
                     ) : (
                       <input
                         type="text"
                         value={customFields[field.id] || ""}
                         placeholder={field.placeholder || "Ex: sem açúcar, etc."}
                         onChange={(e) => handleCustomFieldChange(field.id, e.target.value)}
-                        className="w-full bg-surface-container border border-white/5 rounded-2xl p-4 text-white focus:outline-none focus:border-primary text-sm"
+                        className={`w-full bg-surface-container border rounded-2xl p-4 text-white focus:outline-none focus:border-primary text-sm transition-all ${
+                          validationErrors[field.id] ? "border-red-500 bg-red-500/5 focus:border-red-500" : "border-white/5"
+                        }`}
                       />
                     )}
                   </div>

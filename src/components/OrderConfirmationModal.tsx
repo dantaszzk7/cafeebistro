@@ -49,11 +49,41 @@ export default function OrderConfirmationModal({
 
     const itemsBlock = `\n*Itens do Pedido:*\n${cartItems
       .map((item) => {
-        const itemPriceStr = item.price !== null ? `R$ ${item.price.toFixed(2)}` : "A confirmar";
-        const detailsStr = item.details && item.details.length > 0
-          ? item.details.map((d) => `   - _${d.label}:_ ${d.value}`).join("\n")
-          : "";
-        return `• *${item.quantity}x ${item.emoji} ${item.name}*   [${itemPriceStr}]\n${detailsStr}`;
+        if (item.id === "cafe-da-manha" || item.id === "almoco" || item.id === "almoco-nobre" || item.id.startsWith("combo-") || item.id === "tapioca") {
+          const itemPriceStr = item.price !== null ? `R$ ${item.price.toFixed(2)}` : "A confirmar";
+          let lines = [];
+          item.details.forEach((d) => {
+            lines.push(`* ${d.label}: ${d.value}`);
+          });
+          return `${item.quantity}x ${item.name} — ${itemPriceStr}\n${lines.join("\n")}`;
+        } else if (item.id === "cafe-da-manha-almoco" || item.id === "cuscuz" || item.id === "inhame" || item.id === "macaxeira") {
+          const itemPriceStr = item.price !== null ? `R$ ${item.price.toFixed(2)}` : "A confirmar";
+          const porcoesVal = item.details.find((d) => d.label === "Quantidade de porções")?.value || "";
+          const carneVal = item.details.find((d) => d.label === "Opções de carne")?.value || "";
+          const acompVal = item.details.find((d) => d.label === "Opções escolhidas")?.value || "";
+          const obsVal = item.details.find((d) => d.label === "Observação do pedido")?.value || "";
+          
+          let lines = [];
+          if (porcoesVal) {
+            lines.push(`* Quantidade de porções: ${porcoesVal}`);
+          }
+          if (carneVal) {
+            lines.push(`* Opções de carne: ${carneVal}`);
+          }
+          if (acompVal) {
+            lines.push(`* Opções escolhidas: ${acompVal}`);
+          }
+          if (obsVal) {
+            lines.push(`* Observação do pedido: ${obsVal}`);
+          }
+          return `${item.quantity}x ${item.name} — ${itemPriceStr}\n${lines.join("\n")}`;
+        } else {
+          const itemPriceStr = item.price !== null ? `R$ ${item.price.toFixed(2)}` : "A confirmar";
+          const detailsStr = item.details && item.details.length > 0
+            ? item.details.map((d) => `   - _${d.label}:_ ${d.value}`).join("\n")
+            : "";
+          return `• *${item.quantity}x ${item.emoji} ${item.name}*   [${itemPriceStr}]\n${detailsStr}`;
+        }
       })
       .join("\n\n")}`;
 

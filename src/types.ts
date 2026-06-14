@@ -1,9 +1,12 @@
 export interface CustomField {
   id: string;
   label: string;
-  type: "text" | "select";
+  type: "text" | "select" | "checkbox";
   placeholder?: string;
   options?: string[];
+  required?: boolean;
+  minChoices?: number;
+  maxChoices?: number;
 }
 
 export interface Variant {

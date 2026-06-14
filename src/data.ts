@@ -56,20 +56,20 @@ export const categories: Category[] = [
     order: 3
   },
   {
-    id: "carnes-nobres-almoco",
-    name: "Carnes Nobres do Almoço",
-    shortName: "Carnes Nobres",
-    description: "Cortes selecionados e carnes nobres grelhadas na hora.",
-    visible: true,
-    order: 3.5
-  },
-  {
     id: "lanches",
     name: "Lanches",
     shortName: "Lanches",
     description: "Lanches rápidos, saborosos e quentinhos.",
     visible: true,
     order: 4
+  },
+  {
+    id: "combos",
+    name: "Combos",
+    shortName: "Combos",
+    description: "Ofertas completas com hambúrguer/pão, batata crocante e bebida.",
+    visible: true,
+    order: 4.5
   },
   {
     id: "sobremesas",
@@ -129,341 +129,157 @@ export const products: Product[] = [
   // CATEGORIA: CAFÉ DA MANHÃ (cafe-da-manha)
   // -----------------------------------------
   {
-    id: "macaxeira",
-    name: "Macaxeira",
+    id: "cafe-da-manha",
+    name: "Café da manhã",
     category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
+    description: "Monte seu café da manhã escolhendo as opções disponíveis.",
     price: 17.99,
-    emoji: "🍠",
-    image: "https://i.ibb.co/WNfRyT2S/macaxeira.png",
+    emoji: "🍽️",
+    image: "https://i.ibb.co/4w3x866p/caf-a-manha.png",
     available: true,
     featured: true,
     order: 1,
     variants: [],
     addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "inhame",
-    name: "Inhame",
-    category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
-    price: 17.99,
-    emoji: "🥔",
-    image: "https://i.ibb.co/kV4cnt0J/inhame.png",
-    available: true,
-    featured: true,
-    order: 2,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "cuscuz",
-    name: "Cuscuz",
-    category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
-    price: 17.99,
-    emoji: "🌽",
-    image: "https://i.ibb.co/KzqCRK0t/cuscuz.png",
-    available: true,
-    featured: true,
-    order: 3,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "charque",
-    name: "Charque",
-    category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
-    price: 17.99,
-    emoji: "🍖",
-    image: "https://i.ibb.co/27mC6SMV/charuqe.png",
-    available: true,
-    featured: false,
-    order: 4,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "queijo-coalho",
-    name: "Queijo coalho",
-    category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
-    price: 17.99,
-    emoji: "🧀",
-    image: "https://i.ibb.co/Z1f6pRBv/queijo-coalho.png",
-    available: true,
-    featured: false,
-    order: 5,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "calabresa",
-    name: "Calabresa",
-    category: "cafe-da-manha",
-    description: "Opção de café da manhã da casa.",
-    price: 17.99,
-    emoji: "🌭",
-    image: "https://i.ibb.co/jZjHhBGV/calabresa.png",
-    available: true,
-    featured: false,
-    order: 6,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "opcoes-principais",
+        label: "Escolha até 2 opções principais",
+        type: "checkbox" as const,
+        required: true,
+        minChoices: 1,
+        maxChoices: 2,
+        options: [
+          "Macaxeira",
+          "Cuscuz",
+          "Inhame"
+        ]
+      },
+      {
+        id: "opcoes-carne",
+        label: "Escolha até 2 opções de carne",
+        type: "checkbox" as const,
+        required: true,
+        minChoices: 1,
+        maxChoices: 2,
+        options: [
+          "Guisado",
+          "Charque",
+          "Galinha guisada",
+          "Galinha assada",
+          "Carne de sol"
+        ]
+      },
+      {
+        id: "observacao",
+        label: "Observação do pedido",
+        type: "text" as const,
+        placeholder: "Ex: sem cebola, pouca farofa, mais macaxeira, sem salada..."
+      }
+    ]
   },
   // -----------------------------------------
   // CATEGORIA: ALMOÇO (almoco)
   // -----------------------------------------
   {
-    id: "peito-de-frango",
-    name: "Peito de frango",
+    id: "almoco",
+    name: "Almoço",
     category: "almoco",
-    description: "Prato de almoço da casa.",
+    description: "Monte seu almoço escolhendo a carne e os acompanhamentos.",
     price: 17.99,
-    emoji: "🍗",
-    image: "https://i.ibb.co/wN2VxWbL/frango.png",
+    emoji: "🍛",
+    image: "https://i.ibb.co/W43JpjCc/almo-o.png",
     available: true,
     featured: true,
     order: 8,
     variants: [],
     addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "carne",
+        label: "Escolha a carne",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Fígado",
+          "Guisado",
+          "Toscana",
+          "Galinha guisada",
+          "Galinha assada",
+          "Guisado de boi",
+          "Filé de peito"
+        ]
+      },
+      {
+        id: "acompanhamentos",
+        label: "Escolha os acompanhamentos",
+        type: "checkbox" as const,
+        required: false,
+        options: [
+          "Arroz",
+          "Feijão",
+          "Macarrão",
+          "Farofa",
+          "Salada"
+        ]
+      },
+      {
+        id: "observacao",
+        label: "Observação do almoço",
+        type: "text" as const,
+        placeholder: "Ex: sem salada, sem farofa, mais arroz, pouco feijão..."
+      }
+    ]
   },
   {
-    id: "figado-ao-molho",
-    name: "Fígado ao molho",
+    id: "almoco-nobre",
+    name: "Almoço Gourmet",
     category: "almoco",
-    description: "Prato de almoço da casa.",
-    price: 17.99,
+    description: "Escolha sua carne nobre e os acompanhamentos do seu almoço.",
+    price: 24.99,
     emoji: "🥩",
-    image: "https://i.ibb.co/m51W0xfQ/figado.png",
+    image: "https://i.ibb.co/5Wvc6PJR/almo-o-gourmet.png",
     available: true,
     featured: true,
     order: 9,
     variants: [],
     addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "charque-almoco",
-    name: "Charque",
-    category: "almoco",
-    description: "Prato de almoço da casa.",
-    price: 17.99,
-    emoji: "🍖",
-    image: "https://i.ibb.co/27mC6SMV/charuqe.png",
-    available: true,
-    featured: true,
-    order: 10,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "toscana",
-    name: "Toscana",
-    category: "almoco",
-    description: "Prato de almoço da casa.",
-    price: 17.99,
-    emoji: "🌭",
-    image: "https://i.ibb.co/mVkSwLvk/toscana.png",
-    available: true,
-    featured: false,
-    order: 11,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "galinha-assada",
-    name: "Galinha assada",
-    category: "almoco",
-    description: "Prato de almoço da casa.",
-    price: 17.99,
-    emoji: "🍗",
-    image: "https://i.ibb.co/gZtn3L0w/galinha-assada.png",
-    available: true,
-    featured: false,
-    order: 12,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "galinha-guisada-almoco",
-    name: "Galinha guisada",
-    category: "almoco",
-    description: "Prato de almoço da casa.",
-    price: 17.99,
-    emoji: "🍲",
-    image: "https://i.ibb.co/zdrQ6xM/guisado.png",
-    available: true,
-    featured: false,
-    order: 13,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "guisado-de-boi",
-    name: "Guisado de boi",
-    category: "almoco",
-    description: "Prato de almoço da casa.",
-    price: 17.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/v4pjsPN8/guisado-de-boi.png",
-    available: true,
-    featured: false,
-    order: 14,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "carne-de-sol",
-    name: "Carne de sol",
-    category: "almoco",
-    description: "Carne de sol suculenta acompanhada de guarnições da casa.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/wNnQf9Jz/carne-de-sol.png",
-    available: true,
-    featured: true,
-    order: 14.1,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "costela",
-    name: "Costela",
-    category: "almoco",
-    description: "Costela cozida lentamente com temperos especiais.",
-    price: 24.99,
-    emoji: "🍖",
-    image: "https://i.ibb.co/8gWTdkSC/costela.png",
-    available: true,
-    featured: true,
-    order: 14.2,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "cupim",
-    name: "Cupim",
-    category: "almoco",
-    description: "Cupim assado lentamente até derreter na boca.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/0yVkfd5F/cupim.png",
-    available: true,
-    featured: true,
-    order: 14.3,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-
-  // -----------------------------------------
-  // CATEGORIA: CARNES NOBRES DO ALMOÇO (carnes-nobres-almoco)
-  // -----------------------------------------
-  {
-    id: "picanha",
-    name: "Picanha",
-    category: "carnes-nobres-almoco",
-    description: "Picanha grelhada e macia, servida no ponto certo.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/TxQf1Pv2/picanha.png",
-    available: true,
-    featured: true,
-    order: 14.4,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "maminha",
-    name: "Maminha",
-    category: "carnes-nobres-almoco",
-    description: "Maminha assada, extremamente suculenta e saborosa.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/Qv2WDyHb/mamminha.png",
-    available: true,
-    featured: true,
-    order: 14.5,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "fraldinha",
-    name: "Fraldinha",
-    category: "carnes-nobres-almoco",
-    description: "Fraldinha fatiada de sabor inigualável e textura macia.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/prXfCvgC/fraldinha.png",
-    available: true,
-    featured: true,
-    order: 14.6,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "colchao-mole",
-    name: "Colchão mole",
-    category: "carnes-nobres-almoco",
-    description: "Corte macio e saboroso de colchão mole grelhado.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/fVJm9S0N/461d9c19-f97b-4a38-b5c4-95561a46b929.png",
-    available: true,
-    featured: false,
-    order: 14.7,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "file-mignon",
-    name: "Filé mignon",
-    category: "carnes-nobres-almoco",
-    description: "O corte mais nobre e macio, grelhado com perfeição.",
-    price: 24.99,
-    emoji: "🥩",
-    image: "https://i.ibb.co/YFmxjxQF/c02d3bbd-0c85-4766-89b0-754bfe7179d8.png",
-    available: true,
-    featured: true,
-    order: 14.8,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
-  },
-  {
-    id: "file-de-tilapia",
-    name: "Filé de tilápia",
-    category: "carnes-nobres-almoco",
-    description: "Filé de tilápia grelhado leve e saboroso.",
-    price: 24.99,
-    emoji: "🐟",
-    image: "https://i.ibb.co/FkFCxrKD/9351fb77-2d8f-4e58-848b-7e799f1e181c.png",
-    available: true,
-    featured: false,
-    order: 14.9,
-    variants: [],
-    addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "carne-nobre",
+        label: "Escolha a carne nobre",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Picanha",
+          "Maminha",
+          "Fraldinha",
+          "Colchão mole",
+          "Filé mignon",
+          "Filé de tilápia"
+        ]
+      },
+      {
+        id: "acompanhamentos",
+        label: "Escolha os acompanhamentos",
+        type: "checkbox" as const,
+        required: false,
+        options: [
+          "Arroz",
+          "Feijão",
+          "Macarrão",
+          "Farofa",
+          "Salada",
+          "Batata frita"
+        ]
+      },
+      {
+        id: "observacao",
+        label: "Observação do almoço",
+        type: "text" as const,
+        placeholder: "Ex: sem salada, sem farofa, carne bem passada, mais arroz..."
+      }
+    ]
   },
 
   // -----------------------------------------
@@ -578,28 +394,47 @@ export const products: Product[] = [
     id: "tapioca",
     name: "Tapioca",
     category: "lanches",
-    description: "Tapioca da casa.",
-    price: null,
+    description: "Escolha dois sabores para montar sua tapioca.",
+    price: 9.99,
     emoji: "🌮",
     image: "https://i.ibb.co/LDmKBCyq/tapioca.png",
     available: true,
     featured: false,
     order: 20,
-    variants: [
-      { id: "frango", name: "Frango", price: 9.99 },
-      { id: "queijo", name: "Queijo", price: 9.99 },
-      { id: "coco", name: "Côco", price: 9.99 },
-      { id: "calabresa", name: "Calabresa", price: 9.99 },
-      { id: "carne-de-sol", name: "Carne de sol", price: 12.99 },
-      { id: "picanha", name: "Picanha", price: 12.99 },
-      { id: "charque", name: "Charque", price: 12.99 },
-      { id: "cupim", name: "Cupim", price: 12.99 },
-      { id: "nutela", name: "Nutela", price: 12.99 },
-      { id: "doce-de-leite", name: "Doce de leite", price: 12.99 },
-      { id: "cartola", name: "Cartola", price: 12.99 }
-    ],
+    variants: [],
     addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "primeiro-sabor",
+        label: "Escolha o primeiro sabor",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Frango",
+          "Queijo",
+          "Côco",
+          "Calabresa"
+        ]
+      },
+      {
+        id: "segundo-sabor",
+        label: "Escolha o segundo sabor",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Frango",
+          "Queijo",
+          "Côco",
+          "Calabresa"
+        ]
+      },
+      {
+        id: "observacao",
+        label: "Observação da tapioca",
+        type: "text" as const,
+        placeholder: "Ex: sem manteiga, bem passada, pouco recheio..."
+      }
+    ]
   },
   {
     id: "mungunza",
@@ -645,6 +480,152 @@ export const products: Product[] = [
     variants: [],
     addons: [],
     customFields: [defaultObservationField]
+  },
+  {
+    id: "batata-frita-m",
+    name: "Batata frita",
+    category: "lanches",
+    description: "Porção de batata frita tamanho M.",
+    price: 14.99,
+    emoji: "🍟",
+    image: "https://i.ibb.co/HTNstCZJ/image.png",
+    available: true,
+    featured: false,
+    order: 24,
+    variants: [
+      {
+        id: "m",
+        name: "Tamanho M",
+        price: 14.99
+      }
+    ],
+    addons: [],
+    customFields: [
+      {
+        id: "observacao",
+        label: "Observação do pedido",
+        type: "text" as const,
+        placeholder: "Ex: sem sal, bem crocante, com ketchup..."
+      }
+    ]
+  },
+
+  // -----------------------------------------
+  // CATEGORIA: COMBOS (combos)
+  // -----------------------------------------
+  {
+    id: "combo-hamburguer-artesanal",
+    name: "Combo Hambúrguer artesanal",
+    category: "combos",
+    description: "Hambúrguer artesanal + batata frita + bebida.",
+    price: 24.99,
+    emoji: "🍔",
+    image: "https://i.ibb.co/6R7DvkbW/combo-artesanal.png",
+    available: true,
+    featured: true,
+    order: 24.1,
+    variants: [],
+    addons: [],
+    customFields: [
+      {
+        id: "bebida",
+        label: "Escolha a bebida do combo",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Suco",
+          "Refrigerante"
+        ]
+      },
+      {
+        id: "detalhe-bebida",
+        label: "Detalhe da bebida",
+        type: "text" as const,
+        placeholder: "Ex: suco de laranja, Coca-Cola, Antártica..."
+      },
+      {
+        id: "observacao",
+        label: "Observação do combo",
+        type: "text" as const,
+        placeholder: "Ex: sem cebola, batata mais crocante, pouco molho..."
+      }
+    ]
+  },
+  {
+    id: "combo-hamburguer-tradicional",
+    name: "Combo Hambúrguer tradicional",
+    category: "combos",
+    description: "Hambúrguer tradicional + batata frita + bebida.",
+    price: 19.99,
+    emoji: "🍔",
+    image: "https://i.ibb.co/xtnj9N4W/combo-hamburguer-tradicional.png",
+    available: true,
+    featured: true,
+    order: 24.2,
+    variants: [],
+    addons: [],
+    customFields: [
+      {
+        id: "bebida",
+        label: "Escolha a bebida do combo",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Suco",
+          "Refrigerante"
+        ]
+      },
+      {
+        id: "detalhe-bebida",
+        label: "Detalhe da bebida",
+        type: "text" as const,
+        placeholder: "Ex: suco de laranja, Coca-Cola, Antártica..."
+      },
+      {
+        id: "observacao",
+        label: "Observação do combo",
+        type: "text" as const,
+        placeholder: "Ex: sem cebola, batata mais crocante, pouco molho..."
+      }
+    ]
+  },
+  {
+    id: "combo-pao-com-charque",
+    name: "Combo Pão com charque",
+    category: "combos",
+    description: "Pão com charque + batata frita + bebida.",
+    price: 19.99,
+    emoji: "🥖",
+    image: "https://i.ibb.co/67jC6ms5/combo-p-o-com-charque.png",
+    available: true,
+    featured: true,
+    order: 24.3,
+    variants: [],
+    addons: [],
+    customFields: [
+      {
+        id: "bebida",
+        label: "Escolha a bebida do combo",
+        type: "select" as const,
+        required: true,
+        options: [
+          "Suco",
+          "Refrigerante"
+        ]
+      },
+      {
+        id: "detalhe-bebida",
+        label: "Detalhe da bebida",
+        type: "text" as const,
+        placeholder: "Ex: suco de laranja, Coca-Cola, Antártica..."
+      },
+      {
+        id: "observacao",
+        label: "Observação do combo",
+        type: "text" as const,
+        placeholder: "Ex: sem cebola, batata mais crocante, pouco molho..."
+      }
+    ]
   },
 
   // -----------------------------------------
@@ -833,7 +814,21 @@ export const products: Product[] = [
     order: 32,
     variants: [],
     addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "sabor-marca",
+        label: "Escolha o sabor/marca",
+        type: "select" as const,
+        required: true,
+        options: ["Coca-Cola", "Antártica"]
+      },
+      {
+        id: "observacao",
+        label: "Observação do pedido",
+        type: "text" as const,
+        placeholder: "Ex: bem gelado..."
+      }
+    ]
   },
   {
     id: "refrigerante-lata",
@@ -848,7 +843,21 @@ export const products: Product[] = [
     order: 33,
     variants: [],
     addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "sabor-marca",
+        label: "Escolha o sabor/marca",
+        type: "select" as const,
+        required: true,
+        options: ["Coca-Cola", "Antártica", "Fanta", "Sprite"]
+      },
+      {
+        id: "observacao",
+        label: "Observação do pedido",
+        type: "text" as const,
+        placeholder: "Ex: bem gelado..."
+      }
+    ]
   },
   {
     id: "refrigerante-mini",
@@ -863,7 +872,21 @@ export const products: Product[] = [
     order: 34,
     variants: [],
     addons: [],
-    customFields: [defaultObservationField]
+    customFields: [
+      {
+        id: "sabor-marca",
+        label: "Escolha o sabor/marca",
+        type: "select" as const,
+        required: true,
+        options: ["Coca-Cola", "Antártica", "Fanta", "Sprite"]
+      },
+      {
+        id: "observacao",
+        label: "Observação do pedido",
+        type: "text" as const,
+        placeholder: "Ex: bem gelado..."
+      }
+    ]
   },
   {
     id: "skinka",

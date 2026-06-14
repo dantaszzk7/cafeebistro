@@ -290,7 +290,14 @@ export default function App() {
   // Quantity controls and items deletion
   const handleIncreaseQty = (key: string) => {
     setCart((prev) =>
-      prev.map((it) => (it.cartKey === key ? { ...it, quantity: it.quantity + 1 } : it))
+      prev.map((it) => {
+        if (it.cartKey === key) {
+          const newQty = it.quantity + 1;
+          const newPrice = it.basePrice !== null ? Number((it.basePrice * newQty).toFixed(2)) : null;
+          return { ...it, quantity: newQty, price: newPrice };
+        }
+        return it;
+      })
     );
   };
 
@@ -300,7 +307,11 @@ export default function App() {
         .map((it) => {
           if (it.cartKey === key) {
             const nextQty = it.quantity - 1;
-            return nextQty > 0 ? { ...it, quantity: nextQty } : null;
+            if (nextQty > 0) {
+              const newPrice = it.basePrice !== null ? Number((it.basePrice * nextQty).toFixed(2)) : null;
+              return { ...it, quantity: nextQty, price: newPrice };
+            }
+            return null;
           }
           return it;
         })
