@@ -395,7 +395,7 @@ export const products: Product[] = [
     name: "Tapioca",
     category: "lanches",
     description: "Escolha dois sabores para montar sua tapioca.",
-    price: 9.99,
+    price: 12.99,
     emoji: "🌮",
     image: "https://i.ibb.co/LDmKBCyq/tapioca.png",
     available: true,
