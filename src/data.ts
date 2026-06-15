@@ -21,7 +21,7 @@ export const storeInfo: StoreInfo = {
   deliveryFee: 7.00, // Taxa de entrega fixa
   paymentInfo: "Aceitamos Pix, Cartão e Dinheiro",
   paymentOptions: ["Pix", "Cartão", "Dinheiro"],
-  pix: "CNPJ: 12.345.678/0001-90" // Chave PIX da loja
+  pix: "CNPJ: 66.644.687/0001-06" // Chave PIX da loja
 };
 
 /*
